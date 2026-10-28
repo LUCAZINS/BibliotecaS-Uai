@@ -1,0 +1,78 @@
+
+<div class="login-container">
+  <div class="login-card">
+
+    <!-- Espaço reservado para a logo -->
+    <div class="logo-container">
+      <img
+        src="images (1).jpg"
+        alt="Logo da empresa"
+        class="logo"
+      />
+    </div>
+
+    <div class="login-header">
+      <h1>Bem-vindo de volta!</h1>
+      <p>Entre com suas credenciais para continuar.</p>
+    </div>
+    <p class="erro-login" *ngIf="erro">
+    {{ erro }}
+    </p>
+    <form (ngSubmit)="entrar()" #loginForm="ngForm">
+
+      <div class="form-group">
+        <label for="email">E-mail</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          [(ngModel)]="email"
+          placeholder="seuemail@empresa.com"
+          autocomplete="username"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="senha">Senha</label>
+        <input
+          type="password"
+          id="senha"
+          name="senha"
+          [(ngModel)]="senha"
+          placeholder="Digite sua senha"
+          autocomplete="current-password"
+          required
+        />
+      </div>
+
+      <div class="login-options">
+        <label class="remember-option">
+        <input
+          type="checkbox"
+          name="lembrar"
+          [(ngModel)]="lembrarDeMim"
+        />
+        <span>Lembrar de mim</span>
+      </label>
+
+        <a routerLink="/recuperar-senha">
+          Esqueceu a senha?
+        </a>
+      </div>
+
+      <button
+        type="submit"
+        class="login-button"
+        [disabled]="loginForm.invalid"
+      >
+        Entrar
+      </button>
+
+    </form>
+
+    <div class="login-footer">
+      <p>© 2026 Sua Empresa. Todos os direitos reservados.</p>
+    </div>
+  </div>
+</div>

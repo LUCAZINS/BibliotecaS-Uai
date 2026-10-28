@@ -1,0 +1,479 @@
+
+  <!-- Cabeçalho -->
+  <header class="topbar">
+    <div class="breadcrumb">
+      <span>Biblioteca</span>
+      <span class="breadcrumb-separator">/</span>
+      <strong>Exemplares</strong>
+    </div>
+
+    <div class="topbar-right">
+      <div class="system-status">
+        <span class="status-dot"></span>
+        Sistema ativo
+      </div>
+      <div class="avatar">B</div>
+    </div>
+  </header>
+<div class="pagina-exemplares">
+
+  <main class="conteudo">
+
+    <!-- Título da página -->
+    <section class="cabecalho">
+      <div class="titulo-area">
+        <h1>Gestão de exemplares</h1>
+        <p>
+          Gerencie os exemplares físicos, códigos de barras e
+          disponibilidade do acervo.
+        </p>
+      </div>
+
+      <button
+        class="btn-primary"
+        type="button"
+        (click)="abrirCadastro()">
+        <span>+</span> Novo exemplar
+      </button>
+    </section>
+
+    <!-- Indicadores -->
+    <section class="indicadores">
+
+      <article class="indicador">
+        <div class="indicador-icone azul">▤</div>
+        <div>
+          <span class="indicador-topo">Total de exemplares</span>
+          <strong>{{ exemplaresAtuais.length }}</strong>
+          <small>Cadastrados no sistema</small>
+        </div>
+      </article>
+
+      <article class="indicador">
+        <div class="indicador-icone verde">✓</div>
+        <div>
+          <span class="indicador-topo">Disponíveis</span>
+          <strong>{{ contarStatus(0) }}</strong>
+          <small>Prontos para empréstimo</small>
+        </div>
+      </article>
+
+      <article class="indicador">
+        <div class="indicador-icone laranja">↗</div>
+        <div>
+          <span class="indicador-topo">Emprestados</span>
+          <strong>{{ contarStatus(1) }}</strong>
+          <small>Fora do acervo disponível</small>
+        </div>
+      </article>
+
+      <article class="indicador">
+        <div class="indicador-icone vermelho">!</div>
+        <div>
+          <span class="indicador-topo">Indisponíveis</span>
+          <strong>{{ contarIndisponiveis() }}</strong>
+          <small>Outros status</small>
+        </div>
+      </article>
+
+    </section>
+
+    <!-- Tabela de exemplares -->
+    <section class="painel-listagem">
+
+      <div class="painel-titulo">
+        <div>
+          <h2>Exemplares cadastrados</h2>
+          <p>Consulte e gerencie os itens do acervo.</p>
+        </div>
+
+        <button
+          type="button"
+          class="btn-secondary"
+          (click)="recarregarExemplares()">
+          ↻ Atualizar
+        </button>
+      </div>
+
+      <!-- Pesquisa e filtros -->
+      <div class="filtros">
+
+        <div class="campo-busca">
+          <span class="icone-pesquisa">⌕</span>
+          <input
+            type="text"
+            placeholder="Buscar por livro, código de barras ou localização..."
+            [(ngModel)]="busca"
+            (ngModelChange)="filtrarExemplares()">
+        </div>
+
+        <select
+          class="filtro-status"
+          aria-label="Filtrar por status"
+          [(ngModel)]="filtroStatus"
+          (ngModelChange)="filtrarExemplares()">
+          <option value="">Todos os status</option>
+          <option value="0">Disponível</option>
+          <option value="1">Emprestado</option>
+          <option value="2">Manutenção</option>
+          <option value="3">Perdido</option>
+          <option value="4">Baixado</option>
+        </select>
+
+        <button
+          type="button"
+          class="limpar-busca"
+          (click)="limparFiltros()">
+          Limpar filtros
+        </button>
+
+      </div>
+
+      <!-- Tabela responsiva -->
+      <div class="tabela-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Exemplar</th>
+              <th>Livro</th>
+              <th>Código de barras</th>
+              <th>Localização</th>
+              <th>Dias de empréstimo</th>
+              <th>Status</th>
+              <th class="coluna-acoes">Ações</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            <tr *ngFor="let exemplar of exemplaresFiltrados">
+
+              <td>
+                <span class="id-exemplar">
+                  #{{ exemplar.id }}
+                </span>
+              </td>
+
+              <td>
+                <div class="livro-info">
+                  <div class="livro-icone">▤</div>
+                  <div>
+                    <strong>
+                      {{ exemplar.nomeLivro || nomeLivroPorId(exemplar.livroId) }}
+                    </strong>
+                    <small>Livro ID: {{ exemplar.livroId }}</small>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="codigo-barras">
+                  {{ exemplar.codigoBarras || 'Não informado' }}
+                </span>
+              </td>
+
+              <td>
+                {{ getLocalizacao(exemplar) || 'Não informada' }}
+              </td>
+
+              <td>
+                <span class="dias-aluguel">
+                  {{ exemplar.diasAluguel }} dias
+                </span>
+              </td>
+
+              <td>
+                <span
+                  class="status"
+                  [ngClass]="classeStatus(exemplar.status)">
+                  <span class="status-ponto"></span>
+                  {{ textoStatus(exemplar.status) }}
+                </span>
+              </td>
+
+              <td>
+                <div class="acoes">
+                  <button
+                    type="button"
+                    class="acao-btn detalhes"
+                    title="Ver detalhes do exemplar"
+                    aria-label="Ver detalhes do exemplar"
+                    (click)="abrirDetalhes(exemplar)">
+                    ⓘ
+                  </button>
+
+                  <button
+                    type="button"
+                    class="acao-btn editar"
+                    title="Editar exemplar"
+                    aria-label="Editar exemplar"
+                    [disabled]="exemplar.status === 1"
+                    (click)="editarExemplar(exemplar)">
+                    ✎
+                  </button>
+
+                  <button
+                    type="button"
+                    class="acao-btn excluir"
+                    title="Excluir exemplar"
+                    aria-label="Excluir exemplar"
+                    [disabled]="exemplar.status === 1"
+                    (click)="confirmarExclusao(exemplar)">
+                    🗑
+                  </button>
+                </div>
+              </td>
+
+            </tr>
+
+            <!-- Lista vazia -->
+            <tr *ngIf="exemplaresFiltrados.length === 0">
+              <td colspan="7">
+                <div class="estado-vazio">
+                  <div class="vazio-icone">⌕</div>
+                  <strong>Nenhum exemplar encontrado</strong>
+                  <p>
+                    Tente alterar os filtros ou cadastre um novo exemplar.
+                  </p>
+                  <button
+                    type="button"
+                    class="btn-secondary"
+                    (click)="limparFiltros()">
+                    Limpar filtros
+                  </button>
+                </div>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <footer class="resumo-listagem">
+        <span>
+          Exibindo {{ exemplaresFiltrados.length }}
+          de {{ exemplaresAtuais.length }} exemplares
+        </span>
+      </footer>
+
+    </section>
+  </main>
+</div>
+
+<!-- Modal de cadastro e edição -->
+<div
+  class="modal-overlay"
+  *ngIf="modalAberto"
+  (click)="fecharModal()">
+
+  <section
+    class="modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="titulo-modal"
+    (click)="$event.stopPropagation()">
+
+    <header class="modal-cabecalho">
+      <div>
+        <h2 id="titulo-modal">
+          {{ modoEdicao ? 'Editar exemplar' : 'Novo exemplar' }}
+        </h2>
+        <p>
+          {{ modoEdicao
+            ? 'Atualize os dados do exemplar selecionado.'
+            : 'Preencha os dados para cadastrar um exemplar.' }}
+        </p>
+      </div>
+
+      <button
+        type="button"
+        class="fechar-modal"
+        aria-label="Fechar"
+        [disabled]="salvando"
+        (click)="fecharModal()">
+        ×
+      </button>
+    </header>
+
+    <form
+      class="formulario"
+      #formExemplar="ngForm"
+      (ngSubmit)="salvarExemplar()">
+
+      <!-- Seleção do livro -->
+      <div class="campo campo-completo" *ngIf="!modoEdicao">
+        <label for="formaBuscaLivro">Localizar livro por *</label>
+
+        <select
+          id="formaBuscaLivro"
+          name="formaBuscaLivro"
+          [(ngModel)]="formaBuscaLivro">
+          <option value="id">ID do livro</option>
+          <option value="nome">Nome do livro</option>
+        </select>
+
+        <select
+          *ngIf="formaBuscaLivro === 'id'"
+          id="livroId"
+          name="livroId"
+          [(ngModel)]="formExemplarDados.livroId"
+          required>
+
+          <option [ngValue]="undefined" disabled>
+            Selecione um livro
+          </option>
+
+          <option
+            *ngFor="let livro of livros"
+            [ngValue]="livro.id">
+            {{ livro.titulo }}
+          </option>
+
+        </select>
+
+        <input
+          *ngIf="formaBuscaLivro === 'nome'"
+          id="nomeLivro"
+          name="nomeLivro"
+          type="text"
+          [(ngModel)]="formExemplarDados.nomeLivro"
+          placeholder="Digite o nome exato do livro"
+          required>
+      </div>
+
+      <!-- Localização -->
+      <div class="campo campo-completo">
+        <label for="enderecavel">
+          Localização / Endereço do exemplar *
+        </label>
+
+        <input
+          id="enderecavel"
+          name="enderecavel"
+          type="text"
+          [ngModel]="getLocalizacaoFormulario()"
+          (ngModelChange)="setLocalizacao($event)"
+          placeholder="Ex.: Estante A, Prateleira 2"
+          required>
+      </div>
+
+      <div class="form-linha">
+
+        <!-- Prazo de empréstimo -->
+        <div class="campo">
+          <label for="diasAluguel">Dias de empréstimo *</label>
+
+          <input
+            id="diasAluguel"
+            name="diasAluguel"
+            type="number"
+            min="1"
+            max="365"
+            [(ngModel)]="formExemplarDados.diasAluguel"
+            [disabled]="modoEdicao && formExemplarDados.status === 1"
+            required>
+        </div>
+
+        <!-- Status -->
+        <div class="campo">
+          <label for="status">Status</label>
+
+          <select
+            id="status"
+            name="status"
+            [(ngModel)]="formExemplarDados.status"
+            [disabled]="modoEdicao && formExemplarDados.status === 1">
+            <option [ngValue]="0">Disponível</option>
+            <option
+              *ngIf="modoEdicao && formExemplarDados.status === 1"
+              [ngValue]="1"
+              disabled>
+              Emprestado (gerenciado pelo sistema)
+            </option>
+            <option [ngValue]="2">Manutenção</option>
+            <option [ngValue]="3">Perdido</option>
+            <option [ngValue]="4">Baixado</option>
+          </select>
+        </div>
+
+      </div>
+
+      <!-- Informação sobre o código de barras -->
+      <div class="aviso-codigo">
+        <span>▤</span>
+        <p>
+          O código de barras será gerado pelo sistema após o cadastro,
+          conforme a configuração do backend.
+        </p>
+      </div>
+
+      <footer class="modal-acoes">
+
+        <button
+          type="button"
+          class="btn-secondary"
+          [disabled]="salvando"
+          (click)="fecharModal()">
+          Cancelar
+        </button>
+
+        <button
+          type="submit"
+          class="btn-primary"
+          [disabled]="salvando || formExemplar.invalid">
+          {{ salvando
+            ? 'Salvando...'
+            : (modoEdicao ? 'Salvar alterações' : 'Cadastrar exemplar') }}
+        </button>
+
+      </footer>
+    </form>
+  </section>
+</div>
+
+<!-- Modal de confirmação de exclusão -->
+<div
+  class="modal-overlay"
+  *ngIf="exemplarParaExcluir"
+  (click)="cancelarExclusao()">
+
+  <section
+    class="modal modal-confirmacao"
+    role="alertdialog"
+    aria-modal="true"
+    aria-labelledby="titulo-exclusao"
+    (click)="$event.stopPropagation()">
+
+    <div class="confirmacao-icone">!</div>
+
+    <h2 id="titulo-exclusao">Excluir exemplar?</h2>
+
+    <p>
+      Tem certeza de que deseja excluir o exemplar
+      <strong>
+        {{ exemplarParaExcluir.codigoBarras || ('#' + exemplarParaExcluir.id) }}
+      </strong>?
+      Essa ação não poderá ser desfeita.
+    </p>
+
+    <footer class="modal-acoes">
+
+      <button
+        type="button"
+        class="btn-secondary"
+        [disabled]="excluindo"
+        (click)="cancelarExclusao()">
+        Cancelar
+      </button>
+
+      <button
+        type="button"
+        class="btn-danger"
+        [disabled]="excluindo"
+        (click)="excluirExemplar()">
+        {{ excluindo ? 'Excluindo...' : 'Sim, excluir' }}
+      </button>
+
+    </footer>
+  </section>
+</div>

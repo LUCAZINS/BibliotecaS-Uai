@@ -1,0 +1,186 @@
+
+<div class="page-container">
+
+  <header class="topbar">
+    <div class="breadcrumb">
+      <span>Biblioteca</span>
+      <span class="breadcrumb-separator">/</span>
+      <strong>Locatários</strong>
+    </div>
+
+    <div class="topbar-right">
+      <div class="system-status">
+        <span class="status-dot"></span>
+        Sistema ativo
+      </div>
+      <div class="avatar">B</div>
+    </div>
+  </header>
+
+  <main class="content">
+
+    <section class="page-heading">
+      <div>
+        <h1>Locatários</h1>
+        <p>Gerencie os locatários cadastrados na biblioteca.</p>
+      </div>
+
+      <button class="btn-primary" (click)="novoLocatario()">
+        <span>+</span> Novo locatário
+      </button>
+    </section>
+
+    <section class="stats">
+      <div class="stat-card">
+        <div class="stat-icon">♙</div>
+        <div>
+          <span>Total de locatários</span>
+          <h2>{{ locatarios.length }}</h2>
+        </div>
+      </div>
+    </section>
+
+    <section class="list-card">
+
+      <div class="list-header">
+        <div>
+          <h2>Todos os locatários</h2>
+          <p>Selecione um locatário para visualizar seus detalhes.</p>
+        </div>
+
+        <div class="search-box">
+          <span>⌕</span>
+          <input
+            type="text"
+            placeholder="Buscar por nome, CPF ou telefone..."
+            [(ngModel)]="busca"
+          />
+        </div>
+      </div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>LOCATÁRIO</th>
+              <th>CPF</th>
+              <th>TELEFONE</th>
+              <th>ENDEREÇO</th>
+              <th class="actions-column">AÇÕES</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr
+              *ngFor="let locatario of locatariosFiltrados"
+              class="clickable-row"
+              [routerLink]="['/Barra/locatarios', locatario.id]"
+              title="Ver detalhes do locatário"
+            >
+              <td class="id-locatario">#{{ locatario.id }}</td>
+              <td>
+                <div class="person-info">
+                  <div class="person-avatar">
+                    {{ (locatario.nome || '?').charAt(0).toUpperCase() }}
+                  </div>
+                  <div class="person-name">
+                    <strong>{{ locatario.nome }}</strong>
+                    <small>ID: {{ locatario.id }}</small>
+                  </div>
+                </div>
+              </td>
+
+              <td>{{ locatario.cpf || 'Não informado' }}</td>
+              <td>{{ locatario.telefone || 'Não informado' }}</td>
+              <td>{{ locatario.endereco || 'Não informado' }}</td>
+
+              <td>
+                <button
+                  class="btn-details"
+                  type="button"
+                  (click)="abrirDetalhes(locatario.id, $event)"
+                >
+                  Ver detalhes
+                  <span>→</span>
+                </button>
+              </td>
+            </tr>
+
+            <tr *ngIf="locatariosFiltrados.length === 0">
+              <td colspan="6" class="empty-state">
+                <div class="empty-icon">♙</div>
+                <strong>Nenhum locatário encontrado</strong>
+                <p>Verifique a busca ou cadastre um novo locatário.</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="list-footer">
+        Exibindo {{ locatariosFiltrados.length }} de
+        {{ locatarios.length }} locatários
+      </div>
+
+    </section>
+
+  </main>
+</div>
+
+<div class="modal-overlay" *ngIf="cadastroAberto">
+  <section class="modal-cadastro" role="dialog" aria-modal="true">
+    <header class="modal-header">
+      <h2>Novo locatário</h2>
+      <button type="button" [disabled]="salvando" (click)="fecharCadastro()">×</button>
+    </header>
+
+    <form (ngSubmit)="salvarLocatario()">
+      <label>Nome *
+        <input name="nome" [(ngModel)]="formulario.nome" required>
+      </label>
+
+      <label>E-mail
+        <input name="email" type="email" [(ngModel)]="formulario.email">
+      </label>
+
+      <label>CPF
+        <input
+          name="cpf"
+          inputmode="numeric"
+          [ngModel]="formulario.cpf"
+          (ngModelChange)="atualizarCpf($event)"
+          maxlength="14"
+          placeholder="000.000.000-00">
+      </label>
+
+      <label>Telefone
+        <input
+          name="telefone"
+          type="tel"
+          inputmode="numeric"
+          [ngModel]="formulario.telefone"
+          (ngModelChange)="atualizarTelefone($event)">
+      </label>
+
+      <label>Endereço
+        <input name="endereco" [(ngModel)]="formulario.endereco">
+      </label>
+
+      <label>Data de nascimento
+        <input name="dataNascimento" type="date" [(ngModel)]="formulario.dataNascimento">
+      </label>
+
+      <p class="mensagem-erro" *ngIf="mensagem">{{ mensagem }}</p>
+
+      <footer class="modal-footer">
+        <button type="button" [disabled]="salvando" (click)="fecharCadastro()">
+          Cancelar
+        </button>
+        <button class="btn-primary" type="submit" [disabled]="salvando">
+          {{ salvando ? 'Salvando...' : 'Cadastrar locatário' }}
+        </button>
+      </footer>
+    </form>
+  </section>
+</div>

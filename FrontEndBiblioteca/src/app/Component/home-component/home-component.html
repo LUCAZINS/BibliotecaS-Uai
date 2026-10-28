@@ -1,0 +1,77 @@
+
+<div class="dashboard">
+
+  <!-- Menu lateral -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon">
+        <img src="/images (1).jpg" alt="Logo da Biblioteca">
+    </div>
+      <div>
+        <h2>Biblioteca</h2>
+      </div>
+    </div>
+
+    <div class="menu-label">MENU PRINCIPAL</div>
+
+    <nav class="navigation">
+  <a
+  routerLink="/Barra/home"
+  routerLinkActive="active"
+  [routerLinkActiveOptions]="{ exact: true }">
+  <span class="nav-icon">⌂</span>
+  <span>Visão geral</span>
+</a>
+
+  <a routerLink="/Barra/livros" routerLinkActive="active">
+    <span class="nav-icon">▤</span>
+    <span>Livros</span>
+  </a>
+
+  <a routerLink="/Barra/exemplares" routerLinkActive="active">
+    <span class="nav-icon">▥</span>
+    <span>Exemplares</span>
+  </a>
+
+  <a routerLink="/Barra/alugueis" routerLinkActive="active">
+    <span class="nav-icon">⇄</span>
+    <span>Empréstimos</span>
+  </a>
+
+  <a routerLink="/Barra/alugatarios" routerLinkActive="active">
+    <span class="nav-icon">♙</span>
+    <span>Leitores</span>
+  </a>
+</nav>
+
+    <div class="sidebar-bottom">
+    <a
+        href="https://wa.me/5538998393623?text=Olá!%20Preciso%20de%20suporte%20no%20sistema%20da%20biblioteca."
+        target="_blank"
+        rel="noopener noreferrer"
+        class="sidebar-help">
+
+        <div class="help-icon">i</div>
+
+        <div class="help-button">
+            <strong>Central de ajuda</strong>
+            <span>Precisa de suporte?</span>
+        </div>
+    </a>
+
+      <button class="logout-button" type="button" (click)="Logout()">
+        <span class="nav-icon">↪</span>
+        Sair do sistema
+      </button>
+
+      <div class="sidebar-footer">
+        <span class="status-dot"></span>
+        Sistema operacional
+      </div>
+    </div>
+  </aside>
+  
+  <router-outlet></router-outlet>
+</div>
+
+  

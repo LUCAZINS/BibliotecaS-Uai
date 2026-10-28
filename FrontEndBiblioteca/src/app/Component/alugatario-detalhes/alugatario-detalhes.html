@@ -1,0 +1,113 @@
+<main class="detalhes-page">
+  <a class="voltar" routerLink="/Barra/alugatarios">← Voltar para locatários</a>
+
+  <ng-container *ngIf="carregando">
+    <section class="estado">
+      <p>Carregando detalhes...</p>
+    </section>
+  </ng-container>
+
+  <section class="estado erro" *ngIf="!carregando && erro">
+    <strong>{{ erro }}</strong>
+  </section>
+
+  <ng-container *ngIf="!carregando && !erro && locatario as pessoa">
+    <header class="cabecalho">
+      <div class="avatar">{{ (pessoa.nome || '?').charAt(0).toUpperCase() }}</div>
+      <div>
+        <span class="eyebrow">LOCATÁRIO #{{ pessoa.id }}</span>
+        <h1>{{ pessoa.nome || 'Nome não informado' }}</h1>
+        <p>{{ pessoa.email || 'E-mail não informado' }}</p>
+      </div>
+      <button class="btn-editar" type="button" (click)="abrirEdicao()">
+        Editar informações
+      </button>
+    </header>
+
+    <section class="cards">
+      <article><strong>{{ pessoa.totalEmprestimos }}</strong><span>Total de empréstimos</span></article>
+      <article><strong>{{ pessoa.emprestimosAtivos }}</strong><span>Empréstimos ativos</span></article>
+      <article><strong>{{ pessoa.emprestimosDevolvidos }}</strong><span>Empréstimos devolvidos</span></article>
+    </section>
+
+    <section class="grid">
+      <article class="painel">
+        <h2>Dados cadastrais</h2>
+        <dl>
+          <div><dt>CPF</dt><dd>{{ pessoa.cpf || 'Não informado' }}</dd></div>
+          <div><dt>Telefone</dt><dd>{{ pessoa.telefone || 'Não informado' }}</dd></div>
+          <div><dt>Endereço</dt><dd>{{ pessoa.endereco || 'Não informado' }}</dd></div>
+          <div><dt>ID</dt><dd>{{ pessoa.id }}</dd></div>
+          <div><dt>E-mail</dt><dd>{{ pessoa.email || 'Não informado' }}</dd></div>
+          <div><dt>Data de nascimento</dt><dd>{{ formatarData(pessoa.dataNascimento) }}</dd></div>
+          <div><dt>Livros alugados</dt><dd>{{ pessoa.livrosAlugados || 'Nenhum registro' }}</dd></div>
+        </dl>
+      </article>
+
+      <article class="painel">
+        <h2>Histórico</h2>
+        <dl>
+          <div><dt>Primeiro empréstimo</dt><dd>{{ formatarData(pessoa.primeiroEmprestimo) }}</dd></div>
+          <div><dt>Último empréstimo</dt><dd>{{ formatarData(pessoa.ultimoEmprestimo) }}</dd></div>
+          <div>
+            <dt>Livro mais emprestado</dt>
+            <dd>
+              {{ pessoa.livroMaisEmprestado?.titulo || 'Nenhum registro' }}
+              <small *ngIf="pessoa.livroMaisEmprestado">
+                ({{ pessoa.livroMaisEmprestado.quantidade }} empréstimos)
+              </small>
+            </dd>
+          </div>
+        </dl>
+      </article>
+    </section>
+  </ng-container>
+
+  <div class="modal-overlay" *ngIf="editando">
+    <section class="modal-edicao" role="dialog" aria-modal="true">
+      <header>
+        <h2>Editar locatário</h2>
+        <button type="button" [disabled]="salvando" (click)="cancelarEdicao()">×</button>
+      </header>
+
+      <form (ngSubmit)="salvarEdicao()">
+        <label>Nome
+          <input name="nome" [(ngModel)]="formulario.nome" required>
+        </label>
+        <label>E-mail
+          <input name="email" type="email" [(ngModel)]="formulario.email">
+        </label>
+        <label>CPF
+          <input
+            name="cpf"
+            inputmode="numeric"
+            [ngModel]="formulario.cpf"
+            (ngModelChange)="atualizarCpf($event)"
+            placeholder="000.000.000-00"
+            maxlength="14">
+        </label>
+        <label>Telefone
+          <input
+            name="telefone"
+            type="tel"
+            inputmode="numeric"
+            [ngModel]="formulario.telefone"
+            (ngModelChange)="atualizarTelefone($event)">
+        </label>
+        <label>Endereço
+          <input name="endereco" [(ngModel)]="formulario.endereco">
+        </label>
+        <label>Data de nascimento
+          <input name="dataNascimento" type="date" [(ngModel)]="formulario.dataNascimento">
+        </label>
+        <p class="mensagem" *ngIf="mensagem">{{ mensagem }}</p>
+        <footer>
+          <button type="button" [disabled]="salvando" (click)="cancelarEdicao()">Cancelar</button>
+          <button class="btn-primary" type="submit" [disabled]="salvando">
+            {{ salvando ? 'Salvando...' : 'Salvar alterações' }}
+          </button>
+        </footer>
+      </form>
+    </section>
+  </div>
+</main>

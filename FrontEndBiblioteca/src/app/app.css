@@ -1,0 +1,9 @@
+.Back {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: linear-gradient(135deg, #7f7f80, #a6a7aa, #ffffff);
+  font-family: Arial, Helvetica, sans-serif;
+}

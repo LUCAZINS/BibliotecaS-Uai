@@ -1,0 +1,205 @@
+
+<div class="dashboard">
+  <main class="main-content">
+
+    <header class="topbar">
+      <div class="breadcrumb">
+        <span>Biblioteca</span>
+        <span class="breadcrumb-separator">/</span>
+        <strong>Visão geral</strong>
+      </div>
+
+      <div class="topbar-right">
+        <div class="system-status">
+          <span class="status-dot"></span>
+          Sistema ativo
+        </div>
+        <div class="avatar">B</div>
+      </div>
+    </header>
+
+    <section class="page-content">
+
+      <section class="welcome-section">
+        <div class="welcome-text">
+          <span class="eyebrow">PAINEL DE CONTROLE</span>
+          <h1>Olá! Seja bem-vindo<span class="wave"> 👋</span></h1>
+          <p>Gerencie sua biblioteca de forma simples, rápida e organizada.</p>
+        </div>
+
+        <div class="welcome-decoration" aria-hidden="true">
+          <div class="book book-one"></div>
+          <div class="book book-two"></div>
+          <div class="book book-three"></div>
+          <div class="decoration-circle"></div>
+        </div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-heading">
+          <div>
+            <h2>Resumo da biblioteca</h2>
+            <p>Acompanhe os principais indicadores.</p>
+          </div>
+          <!-- <span class="updated-label">
+            <span class="status-dot"></span>
+            Visão geral
+          </span> -->
+        </div>
+
+        <div class="stats-grid">
+
+          <article class="stat-card">
+            <div class="stat-top">
+              <div class="stat-icon purple">▤</div>
+              <span class="stat-caption">ACERVO</span>
+            </div>
+            <div class="stat-value">{{ totalLivros }}</div>
+            <h3>Livros cadastrados</h3>
+            <p>Obras registradas no sistema</p>
+            <a routerLink="/Barra/livros" class="stat-link">
+              Gerenciar livros <span>→</span>
+            </a>
+          </article>
+
+          <article class="stat-card">
+            <div class="stat-top">
+              <div class="stat-icon blue">▥</div>
+              <span class="stat-caption">EXEMPLARES</span>
+            </div>
+            <div class="stat-value">{{ exemplaresDisponiveis }}</div>
+            <h3>Exemplares disponíveis</h3>
+            <p>Itens disponíveis para empréstimo</p>
+            <a routerLink="/Barra/exemplares" class="stat-link">
+              Ver exemplares <span>→</span>
+            </a>
+          </article>
+
+          <article class="stat-card">
+            <div class="stat-top">
+              <div class="stat-icon orange">⇄</div>
+              <span class="stat-caption">CIRCULAÇÃO</span>
+            </div>
+            <div class="stat-value">{{ emprestimosAtivos }}</div>
+            <h3>Empréstimos ativos</h3>
+            <p>Empréstimos em andamento</p>
+            <a routerLink="/Barra/alugueis" class="stat-link">
+              Ver empréstimos <span>→</span>
+            </a>
+          </article>
+
+          <article class="stat-card">
+            <div class="stat-top">
+              <div class="stat-icon green">♙</div>
+              <span class="stat-caption">CADASTROS</span>
+            </div>
+            <div class="stat-value">{{ totalLeitores }}</div>
+            <h3>Leitores cadastrados</h3>
+            <p>Leitores registrados na biblioteca</p>
+            <a routerLink="/Barra/alugatarios" class="stat-link">
+              Ver leitores <span>→</span>
+            </a>
+          </article>
+
+        </div>
+      </section>
+
+      <section class="bottom-grid">
+
+        <div class="content-card quick-access">
+          <div class="card-heading">
+            <div>
+              <h2>Acesso rápido</h2>
+              <p>Atalhos para as tarefas mais utilizadas.</p>
+            </div>
+          </div>
+
+          <div class="quick-grid">
+
+            
+        <a
+        [routerLink]="['/Barra/livros']"
+        [queryParams]="{ cadastrarLivros: 'true' }"
+        class="quick-item">
+
+        <div class="quick-icon purple">＋</div>
+
+        <div>
+            <strong>Cadastrar livro</strong>
+            <span>Adicionar uma obra ao acervo</span>
+        </div>
+
+        <span class="quick-arrow">↗</span>
+        </a>
+
+
+            <a routerLink="/Barra/exemplares" class="quick-item">
+              <div class="quick-icon blue">▥</div>
+              <div>
+                <strong>Gerenciar exemplares</strong>
+                <span>Controlar códigos de barras e status</span>
+              </div>
+              <span class="quick-arrow">↗</span>
+            </a>
+
+            <a routerLink="/Barra/alugueis" class="quick-item">
+              <div class="quick-icon orange">⇄</div>
+              <div>
+                <strong>Empréstimos</strong>
+                <span>Consultar e registrar movimentações</span>
+              </div>
+              <span class="quick-arrow">↗</span>
+            </a>
+
+            <a routerLink="/Barra/alugatarios" class="quick-item">
+              <div class="quick-icon green">♙</div>
+              <div>
+                <strong>Cadastrar leitor</strong>
+                <span>Registrar um novo leitor</span>
+              </div>
+              <span class="quick-arrow">↗</span>
+            </a>
+
+          </div>
+        </div>
+
+        <div class="content-card overview-card">
+          <div class="card-heading">
+            <div>
+              <h2>Visão do sistema</h2>
+              <p>Organização e controle do acervo.</p>
+            </div>
+            <div class="overview-symbol">✦</div>
+          </div>
+
+          <div class="overview-illustration">
+            <div class="illustration-book">B</div>
+            <div class="illustration-lines">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+
+          <h3>Sua biblioteca em um só lugar</h3>
+          <p class="overview-description">
+            Centralize livros, exemplares, leitores e empréstimos
+            em uma única plataforma.
+          </p>
+
+          <a routerLink="/Barra/livros" class="primary-button">
+            Explorar acervo <span>→</span>
+          </a>
+        </div>
+
+      </section>
+
+      <footer class="page-footer">
+        <span>Biblioteca · Sistema de gerenciamento</span>
+        <span>Organização, conhecimento e praticidade.</span>
+        <span>Versão 1.0</span>
+      </footer>
+
+    </section>
+  </main>
+</div>

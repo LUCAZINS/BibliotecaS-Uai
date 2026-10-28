@@ -1,0 +1,48 @@
+<main class="detalhes-aluguel">
+  <a class="voltar" routerLink="/Barra/alugueis">
+    ← Voltar para empréstimos
+  </a>
+
+  <p *ngIf="carregando" class="estado">Carregando detalhes do empréstimo...</p>
+  <p *ngIf="!carregando && erro" class="erro">{{ erro }}</p>
+
+  <ng-container *ngIf="!carregando && aluguel">
+    <section class="card">
+      <span class="identificador">Empréstimo #{{ aluguel.id }}</span>
+      <h1>{{ aluguel.livro || 'Livro não informado' }}</h1>
+      <span class="status">{{ aluguel.status }}</span>
+
+      <div class="informacoes">
+        <div><span>Alugatario ID</span><strong>{{ aluguel.alugatarioId }}</strong></div>
+        <div><span>Exemplar ID</span><strong>{{ aluguel.exemplarId }}</strong></div>
+        <div><span>Código de barras</span><strong>{{ aluguel.codigoBarras }}</strong></div>
+        <div><span>Nome do locatário</span><strong>{{ aluguel.nomeLocatario || 'Não informado' }}</strong></div>
+        <div><span>Data do aluguel</span><strong>{{ aluguel.dataAluguel | date:'dd/MM/yyyy' }}</strong></div>
+        <div><span>Devolução prevista</span><strong>{{ aluguel.dataDevolucaoPrevista | date:'dd/MM/yyyy' }}</strong></div>
+        <div><span>Devolução real</span><strong>{{ aluguel.dataDevolucaoReal | date:'dd/MM/yyyy' }}</strong></div>
+        <div><span>Usuário responsável</span><strong>{{ aluguel.usuarioResponsavel || 'Não informado' }}</strong></div>
+        <div><span>Usuário da devolução</span><strong>{{ aluguel.usuarioDevolucao || 'Não informado' }}</strong></div>
+        <div class="campo-largo"><span>Observações</span><strong>{{ aluguel.observacoes || 'Nenhuma observação' }}</strong></div>
+      </div>
+    </section>
+
+    <section class="card" *ngIf="exemplar">
+      <header class="cabecalho">
+        <div>
+          <h2>Dados do exemplar</h2>
+          <p>Informações do exemplar associado a este empréstimo.</p>
+        </div>
+      </header>
+
+      <div class="informacoes">
+        <div><span>Código de barras</span><strong>{{ exemplar.codigoBarras }}</strong></div>
+        <div><span>Dias de aluguel</span><strong>{{ exemplar.diasAluguel }}</strong></div>
+        <div><span>Localização</span><strong>{{ exemplar['endereçavel'] || 'Não informada' }}</strong></div>
+        <div><span>ID</span><strong>{{ exemplar.id }}</strong></div>
+        <div><span>Livro ID</span><strong>{{ exemplar.livroId }}</strong></div>
+        <div><span>Nome do livro</span><strong>{{ exemplar.nomeLivro || aluguel.livro }}</strong></div>
+        <div><span>Status</span><strong>{{ exemplar.status }} - {{ statusExemplar(exemplar.status) }}</strong></div>
+      </div>
+    </section>
+  </ng-container>
+</main>

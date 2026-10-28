@@ -1,0 +1,63 @@
+<main class="detalhes-exemplar">
+  <a class="voltar" routerLink="/Barra/exemplares">
+    ← Voltar para exemplares
+  </a>
+
+  <p *ngIf="carregando" class="estado">Carregando detalhes do exemplar...</p>
+  <p *ngIf="!carregando && erro" class="erro">{{ erro }}</p>
+
+  <ng-container *ngIf="!carregando && exemplar">
+    <section class="card">
+      <span class="identificador">Exemplar #{{ exemplar.id }}</span>
+      <h1>{{ exemplar.nomeLivro || 'Livro não informado' }}</h1>
+
+      <div class="informacoes">
+        <div><span>ID</span><strong>{{ exemplar.id }}</strong></div>
+        <div><span>Livro ID</span><strong>{{ exemplar.livroId }}</strong></div>
+        <div><span>Código de barras</span><strong>{{ exemplar.codigoBarras }}</strong></div>
+        <div><span>Dias de aluguel</span><strong>{{ exemplar.diasAluguel }}</strong></div>
+        <div><span>Localização</span><strong>{{ exemplar['endereçavel'] || 'Não informada' }}</strong></div>
+        <div><span>Status</span><strong>{{ statusExemplar(exemplar.status) }}</strong></div>
+      </div>
+    </section>
+
+    <section class="card historico">
+      <header class="cabecalho">
+        <div>
+          <h2>Empréstimos realizados</h2>
+          <p>Histórico completo deste exemplar.</p>
+        </div>
+        <strong>{{ emprestimos.length }} registro(s)</strong>
+      </header>
+
+      <div class="tabela-wrapper" *ngIf="emprestimos.length">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>LOCATÁRIO</th>
+              <th>DATA DO EMPRÉSTIMO</th>
+              <th>DEVOLUÇÃO PREVISTA</th>
+              <th>DEVOLUÇÃO REAL</th>
+              <th>STATUS</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let aluguel of emprestimos">
+              <td>#{{ aluguel.id }}</td>
+              <td>{{ aluguel.nomeLocatario || 'Não informado' }}</td>
+              <td>{{ aluguel.dataAluguel | date:'dd/MM/yyyy' }}</td>
+              <td>{{ aluguel.dataDevolucaoPrevista | date:'dd/MM/yyyy' }}</td>
+              <td>{{ aluguel.dataDevolucaoReal | date:'dd/MM/yyyy' }}</td>
+              <td>{{ aluguel.status }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p *ngIf="!emprestimos.length" class="sem-registros">
+        Nenhum empréstimo foi realizado para este exemplar.
+      </p>
+    </section>
+  </ng-container>
+</main>

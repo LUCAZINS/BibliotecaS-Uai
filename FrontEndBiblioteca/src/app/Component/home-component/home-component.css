@@ -1,0 +1,339 @@
+
+/* ===== LAYOUT PRINCIPAL ===== */
+.dashboard {
+  /* display: flex; */
+  min-height: 100vh;
+  background: #f5f7fb;
+  color: #1e293b;
+  font-family: "Inter", "Segoe UI", sans-serif;
+}
+
+/* ===== MENU LATERAL ===== */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  width: 260px;
+  height: 100vh;
+  padding: 26px 18px 18px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  background: #111827;
+  color: #f8fafc;
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* ===== LOGO E IDENTIFICAÇÃO ===== */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
+  margin-bottom: 38px;
+  padding: 0 5px;
+}
+
+.brand-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 46px;
+  height: 46px;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.brand-icon img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 3px;
+  box-sizing: border-box;
+  object-fit: contain;
+}
+
+.brand h2 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+/* ===== TÍTULO DO MENU ===== */
+.menu-label {
+  margin: 0 0 13px 10px;
+  color: #8490a5;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+/* ===== NAVEGAÇÃO ===== */
+.navigation {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.navigation a {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  min-height: 46px;
+  padding: 0 13px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  color: #b8c2d2;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.navigation a:hover {
+  background: rgba(255, 255, 255, 0.07);
+  color: #ffffff;
+  transform: translateX(3px);
+}
+
+.navigation a.active,
+.navigation a[aria-current="page"] {
+  background: #2563eb;
+  color: #ffffff;
+  box-shadow: 0 5px 14px rgba(37, 99, 235, 0.22);
+}
+
+.nav-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 23px;
+  font-size: 21px;
+  line-height: 1;
+}
+
+/* ===== PARTE INFERIOR DA SIDEBAR ===== */
+.sidebar-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 30px;
+}
+
+/* ===== CENTRAL DE AJUDA ===== */
+.sidebar-help {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  min-width: 0;
+  padding: 13px 11px;
+  box-sizing: border-box;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.045);
+  color: #f8fafc;
+  text-decoration: none;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.sidebar-help:hover {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.17);
+}
+
+.help-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 31px;
+  height: 31px;
+  border-radius: 9px;
+  background: rgba(59, 130, 246, 0.18);
+  color: #93c5fd;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.help-button {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.help-button strong {
+  color: #f8fafc;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.help-button span {
+  color: #9ca9bc;
+  font-size: 11px;
+}
+
+/* ===== BOTÃO SAIR ===== */
+.logout-button {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  width: 100%;
+  min-height: 45px;
+  padding: 0 13px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: #b8c2d2;
+  font-family: inherit;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.logout-button:hover {
+  background: rgba(239, 68, 68, 0.12);
+  color: #fca5a5;
+}
+
+.logout-button .nav-icon {
+  font-size: 21px;
+}
+
+/* ===== STATUS DO SISTEMA ===== */
+.sidebar-footer {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 15px 8px 3px;
+  border-top: 1px solid rgba(255, 255, 255, 0.09);
+  color: #9ca9bc;
+  font-size: 11px;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.45);
+}
+
+/* ===== ÁREA CENTRAL DAS TELAS ===== */
+/* O router-outlet é substituído pelo componente da rota.
+   Por isso, a margem deve ficar nos componentes exibidos
+   ou em um contêiner que envolva o router-outlet. */
+
+.dashboard > *:not(.sidebar) {
+  min-width: 0;
+}
+
+/* ===== RESPONSIVIDADE ===== */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 220px;
+    padding: 22px 13px 15px;
+  }
+
+  .dashboard > *:not(.sidebar) {
+    margin-left: 220px;
+  }
+
+  .brand h2 {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar {
+    width: 75px;
+    padding: 20px 9px 12px;
+  }
+
+  .brand {
+    justify-content: center;
+    margin-bottom: 30px;
+    padding: 0;
+  }
+
+  .brand h2,
+  .menu-label,
+  .navigation a span:not(.nav-icon),
+  .help-button,
+  .logout-button:not(.nav-icon),
+  .sidebar-footer {
+    display: none;
+  }
+
+  .navigation a {
+    justify-content: center;
+    padding: 0;
+  }
+
+  .sidebar-help {
+    justify-content: center;
+    padding: 10px 0;
+  }
+
+  .help-icon {
+    width: 31px;
+    height: 31px;
+  }
+
+  .logout-button {
+    justify-content: center;
+    padding: 0;
+  }
+
+  .dashboard > *:not(.sidebar) {
+    margin-left: 75px;
+  }
+}
+
+/* ===== ACESSIBILIDADE ===== */
+@media (prefers-reduced-motion: reduce) {
+  .navigation a,
+  .sidebar-help,
+  .logout-button {
+    transition: none;
+  }
+}
+:host {
+  display: block;
+  min-width: 0;
+  min-height: 100vh;
+  margin-left: 260px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  :host {
+    margin-left: 220px;
+  }
+}
+
+@media (max-width: 480px) {
+  :host {
+    margin-left: 75px;
+  }
+}
+

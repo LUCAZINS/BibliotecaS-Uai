@@ -1,0 +1,104 @@
+<main class="detalhes-livro">
+  <a class="voltar" routerLink="/Barra/livros">← Voltar para livros</a>
+
+  <p *ngIf="carregando" class="estado">Carregando detalhes do livro...</p>
+  <p *ngIf="!carregando && erro" class="erro">{{ erro }}</p>
+
+  <section *ngIf="!carregando && livro" class="livro-card">
+    <header>
+      <span class="identificador">Livro #{{ livro.id }}</span>
+      <h1>{{ livro.titulo }}</h1>
+      <p class="autor">{{ livro.autor || 'Autor não informado' }}</p>
+    </header>
+
+    <div class="informacoes">
+      <div>
+        <span>ISBN</span>
+        <strong>{{ livro.isbn || 'Não informado' }}</strong>
+      </div>
+      <div>
+        <span>Editora</span>
+        <strong>{{ livro.editora || 'Não informada' }}</strong>
+      </div>
+      <div>
+        <span>Gráfica</span>
+        <strong>{{ livro.grafica || 'Não informada' }}</strong>
+      </div>
+      <div>
+        <span>Edição</span>
+        <strong>{{ livro.edicao || 'Não informada' }}</strong>
+      </div>
+      <div>
+        <span>Ano de publicação</span>
+        <strong>{{ livro.anoPublicacao || 'Não informado' }}</strong>
+      </div>
+      <div>
+        <span>Idade recomendada</span>
+        <strong>{{ livro.idade }}</strong>
+      </div>
+      <div>
+        <span>Total de exemplares</span>
+        <strong>{{ livro.totalExemplares }}</strong>
+      </div>
+      <div>
+        <span>Disponíveis</span>
+        <strong>{{ livro.exemplaresDisponiveis }}</strong>
+      </div>
+    </div>
+
+    <section class="generos" *ngIf="livro.generos.length">
+      <h2>Gêneros</h2>
+      <div class="generos-lista">
+        <span class="genero" *ngFor="let genero of livro.generos">
+          #{{ genero.id }} {{ genero.nome || 'Sem nome' }}
+        </span>
+      </div>
+    </section>
+
+    <div class="sinopse" *ngIf="livro.sinopse">
+      <h2>Sinopse</h2>
+      <p>{{ livro.sinopse }}</p>
+    </div>
+
+    <section class="exemplares" aria-labelledby="titulo-exemplares">
+      <header class="exemplares-cabecalho">
+        <div>
+          <h2 id="titulo-exemplares">Exemplares</h2>
+          <p>Consulte o status e a localização de cada exemplar.</p>
+        </div>
+        <strong>{{ livro.exemplares.length }} exemplar(es)</strong>
+      </header>
+
+      <div class="tabela-exemplares" *ngIf="livro.exemplares.length">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>CÓDIGO DE BARRAS</th>
+              <th>STATUS</th>
+              <th>LOCALIZAÇÃO</th>
+              <th>DIAS DE ALUGUEL</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let exemplar of livro.exemplares">
+              <td>#{{ exemplar.id }}</td>
+              <td>{{ exemplar.codigoBarras }}</td>
+              <td>
+                <span class="status-exemplar">
+                  {{ statusExemplar(exemplar.status) }}
+                </span>
+              </td>
+              <td>{{ localizacaoExemplar(exemplar) }}</td>
+              <td>{{ exemplar.diasAluguel }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="sem-exemplares" *ngIf="!livro.exemplares.length">
+        Nenhum exemplar cadastrado para este livro.
+      </p>
+    </section>
+  </section>
+</main>

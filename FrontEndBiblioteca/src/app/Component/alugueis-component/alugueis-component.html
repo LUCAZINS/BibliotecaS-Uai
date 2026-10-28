@@ -1,0 +1,326 @@
+<div class="pagina-emprestimos">
+
+  <!-- Barra superior -->
+  <header class="topbar">
+    <div class="breadcrumb">
+      <span>Biblioteca</span>
+      <span class="breadcrumb-separator">/</span>
+      <strong>Empréstimos</strong>
+    </div>
+
+    <div class="topbar-right">
+      <div class="system-status">
+        <span class="status-dot"></span>
+        Sistema ativo
+      </div>
+      <div class="avatar">B</div>
+    </div>
+  </header>
+
+  <!-- Conteúdo -->
+  <main class="conteudo">
+
+    <section class="cabecalho-pagina">
+      <div>
+        <h1>Empréstimos</h1>
+        <p>Gerencie os empréstimos e as devoluções de livros.</p>
+      </div>
+
+      <button class="btn-primary" type="button" (click)="abrirFluxo('novo')">
+        <span class="icone">+</span>
+        Novo empréstimo
+      </button>
+    </section>
+
+    <p class="mensagem-sucesso" *ngIf="mensagemSucesso">
+      {{ mensagemSucesso }}
+    </p>
+
+    <!-- Indicadores -->
+    <section class="cards-resumo">
+
+      <article class="card-resumo">
+        <div class="card-info">
+          <span class="card-titulo">Empréstimos ativos</span>
+          <strong>{{ emprestimosAtivos }}</strong>
+          <small>Livros atualmente emprestados</small>
+        </div>
+        <div class="card-icone azul">↗</div>
+      </article>
+
+      <article class="card-resumo">
+        <div class="card-info">
+          <span class="card-titulo">Devoluções hoje</span>
+          <strong>{{ emprestimosAtivos }}</strong>
+          <small>Previstas para hoje</small>
+        </div>
+        <div class="card-icone verde">↩</div>
+      </article>
+
+      <article class="card-resumo">
+        <div class="card-info">
+          <span class="card-titulo">Em atraso</span>
+          <strong>{{ emprestimosAtrasados }}</strong>
+          <small>Precisam de atenção</small>
+        </div>
+        <div class="card-icone vermelho">!</div>
+      </article>
+
+      <article class="card-resumo">
+        <div class="card-info">
+          <span class="card-titulo">Devolvidos</span>
+          <strong>{{ emprestimosDevolvidos }}</strong>
+          <small>Total de devoluções</small>
+        </div>
+        <div class="card-icone roxo">✓</div>
+      </article>
+
+    </section>
+
+    <!-- Tabela de empréstimos -->
+    <section class="painel-emprestimos">
+
+      <div class="painel-cabecalho">
+        <div>
+          <h2>Todos os empréstimos</h2>
+          <p>Acompanhe os registros de empréstimos da biblioteca.</p>
+        </div>
+
+        <button class="btn-secundario" type="button">
+          ↓ Exportar
+        </button>
+      </div>
+
+      <!-- Pesquisa e filtros -->
+      <div class="filtros">
+
+        <div class="campo-pesquisa">
+          <span class="pesquisa-icone">⌕</span>
+          <input
+            type="search"
+            placeholder="Buscar por locatário, livro ou código..."
+            aria-label="Buscar empréstimos"
+            [(ngModel)]="busca"
+            (ngModelChange)="atualizarFiltros()"
+          />
+        </div>
+
+        <select aria-label="Filtrar por situação" [(ngModel)]="filtroStatus"
+          (ngModelChange)="atualizarFiltros()">
+          <option value="">Todas as situações</option>
+          <option value="ativo">Ativo</option>
+          <option value="atrasado">Em atraso</option>
+          <option value="devolvido">Devolvido</option>
+        </select>
+
+        <input
+          type="date"
+          aria-label="Filtrar por data"
+          title="Filtrar por data"
+          [(ngModel)]="filtroData"
+          (ngModelChange)="atualizarFiltros()"
+        />
+
+      </div>
+
+      <!-- Tabela -->
+      <div class="tabela-container">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>LOCATÁRIO</th>
+              <th>LIVRO / EXEMPLAR</th>
+              <th>DATA DO EMPRÉSTIMO</th>
+              <th>DEVOLUÇÃO PREVISTA</th>
+              <th>STATUS</th>
+              <th>AÇÕES</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let aluguel of alugueisDaPagina">
+              <td class="id-emprestimo">#{{ aluguel.id }}</td>
+              <td>
+                <div class="pessoa">
+                  <div class="pessoa-avatar">
+                    {{ aluguel.nomeLocatario.slice(0, 2).toUpperCase() }}
+                  </div>
+                  <div>
+                    <strong>{{ aluguel.nomeLocatario }}</strong>
+                    <small>ID: {{ aluguel.alugatarioId }}</small>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <div
+                  class="livro-info livro-clicavel"
+                  role="link"
+                  tabindex="0"
+                  [attr.aria-label]="'Abrir detalhes do livro ' + aluguel.livro"
+                  (click)="abrirLivro(aluguel)"
+                  (keydown.enter)="abrirLivro(aluguel)"
+                  (keydown.space)="abrirLivro(aluguel); $event.preventDefault()"
+                >
+                  <strong>{{ aluguel.livro }}</strong>
+                  <small>Exemplar #{{ aluguel.codigoBarras }}</small>
+                </div>
+              </td>
+
+              <td>{{ aluguel.dataAluguel | date:'dd/MM/yyyy' }}</td>
+              <td>{{ aluguel.dataDevolucaoPrevista | date:'dd/MM/yyyy' }}</td>
+
+              <td>
+                <span class="status-badge"
+                  [class.status-ativo]="aluguel.status.toLowerCase() === 'ativo'"
+                  [class.status-devolvido]="aluguel.status.toLowerCase() === 'devolvido'"
+                  [class.status-atrasado]="aluguel.status.toLowerCase() !== 'ativo' &&
+                    aluguel.status.toLowerCase() !== 'devolvido'">
+                  {{ aluguel.status }}
+                </span>
+              </td>
+
+              <td>
+                <button class="btn-acao" type="button"
+                  [attr.aria-label]="'Ver empréstimo de ' + aluguel.nomeLocatario"
+                  title="Ver detalhes do empréstimo"
+                  (click)="abrirDetalhesEmprestimo(aluguel)">
+                  ⋯
+                </button>
+              </td>
+            </tr>
+
+            <tr *ngIf="!carregando && alugueisFiltrados.length === 0">
+              <td colspan="7" class="estado-vazio">
+                {{ erro || 'Nenhum empréstimo encontrado.' }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Rodapé da tabela -->
+      <footer class="tabela-rodape">
+        <span>
+          Mostrando {{ primeiroItemExibido }}-{{ ultimoItemExibido }}
+          de {{ alugueisFiltrados.length }} empréstimos
+        </span>
+
+        <div class="paginacao">
+          <button type="button" [disabled]="paginaAtual === 1"
+            (click)="paginaAnterior()" aria-label="Página anterior">
+            ‹
+          </button>
+          <button
+            type="button"
+            *ngFor="let pagina of paginas"
+            [class.pagina-atual]="paginaAtual === pagina"
+            [attr.aria-current]="paginaAtual === pagina ? 'page' : null"
+            (click)="irParaPagina(pagina)">
+            {{ pagina }}
+          </button>
+          <button type="button" [disabled]="paginaAtual === totalPaginas"
+            (click)="proximaPagina()" aria-label="Próxima página">
+            ›
+          </button>
+        </div>
+      </footer>
+
+    </section>
+
+  </main>
+</div>
+
+<div class="modal-overlay" *ngIf="etapa">
+  <section class="modal-emprestimo" role="dialog" aria-modal="true">
+    <header class="painel-cabecalho">
+      <div>
+        <h2>{{ etapa === 'codigo' ? 'Consultar exemplar' :
+          etapa === 'devolucao' ? 'Devolução de empréstimo' :
+          'Novo empréstimo' }}</h2>
+        <p>{{ etapa === 'codigo' ? 'Informe o código de barras para continuar.' :
+          etapa === 'devolucao' ? 'Confirme a devolução do exemplar.' :
+          'Identifique o locatário para registrar o empréstimo.' }}</p>
+      </div>
+      <button class="btn-acao" type="button" [disabled]="salvando"
+        (click)="fecharModal()" aria-label="Fechar">×</button>
+    </header>
+
+    <label class="campo-modal" *ngIf="etapa === 'codigo'">
+      Código de barras
+      <input [(ngModel)]="codigoBarras" (keyup.enter)="consultarExemplar()"
+        autocomplete="off" autofocus aria-label="Código de barras do exemplar">
+    </label>
+
+    <p class="mensagem-erro" *ngIf="mensagem">{{ mensagem }}</p>
+
+    <div class="resultado-exemplar" *ngIf="exemplarSelecionado &&
+      etapa !== 'codigo'">
+      <strong>{{ exemplarSelecionado.nomeLivro }}</strong>
+      <small>Código: {{ exemplarSelecionado.codigoBarras }}</small>
+      <small>Status:
+        {{ exemplarSelecionado.status === 0 ? 'Disponível' : 'Emprestado' }}
+      </small>
+    </div>
+
+    <div *ngIf="etapa === 'devolucao' && aluguelSelecionado"
+      class="resultado-exemplar">
+      <strong>Empréstimo ativo</strong>
+      <small>Locatário: {{ aluguelSelecionado.nomeLocatario }}</small>
+      <small>Devolução prevista:
+        {{ aluguelSelecionado.dataDevolucaoPrevista | date:'dd/MM/yyyy' }}
+      </small>
+      <button class="btn-primary" type="button" [disabled]="salvando"
+        (click)="confirmarDevolucao()">
+        {{ salvando ? 'Registrando...' : 'Confirmar devolução' }}
+      </button>
+    </div>
+
+    <div *ngIf="etapa === 'locatario'"
+      class="formulario-emprestimo">
+      <label class="campo-modal">CPF do locatário
+        <input [ngModel]="cpf" (ngModelChange)="atualizarCpf($event)"
+          maxlength="14" inputmode="numeric" aria-label="CPF do locatário">
+      </label>
+      <button class="btn-secundario" type="button"
+        [disabled]="carregandoLocatarios || salvando" (click)="buscarPorCpf()">
+        {{ carregandoLocatarios ? 'Buscando...' : 'Buscar CPF' }}
+      </button>
+      <button class="btn-secundario" type="button"
+        [disabled]="carregandoLocatarios || salvando"
+        (click)="buscarLocatarios()">Buscar locatário</button>
+
+      <div class="resultado-exemplar" *ngIf="locatarioSelecionado">
+        <strong>{{ locatarioSelecionado.nome }}</strong>
+        <small>CPF: {{ locatarioSelecionado.cpf }}</small>
+        <button class="btn-primary" type="button" [disabled]="salvando"
+          (click)="confirmarEmprestimo()">
+          {{ salvando ? 'Registrando...' : 'Confirmar empréstimo' }}
+        </button>
+      </div>
+
+      <div class="resultados-locatarios" *ngIf="resultadosLocatarios.length">
+        <div *ngFor="let locatario of resultadosLocatarios">
+          <span>{{ locatario.nome }} - {{ locatario.cpf }}</span>
+          <button class="btn-secundario" type="button"
+            (click)="selecionarLocatario(locatario)">Selecionar</button>
+        </div>
+      </div>
+    </div>
+
+    <footer class="modal-acoes">
+      <button class="btn-secundario" type="button" [disabled]="salvando"
+        (click)="fecharModal()">Cancelar</button>
+      <button class="btn-secundario" type="button"
+        *ngIf="etapa === 'locatario'" [disabled]="salvando"
+        (click)="voltarParaCodigo()">Voltar</button>
+      <button class="btn-primary" type="button" *ngIf="etapa === 'codigo'"
+        [disabled]="carregandoConsulta || salvando"
+        (click)="consultarExemplar()">
+        {{ carregandoConsulta ? 'Consultando...' :
+          operacao === 'f2' ? 'Abrir livro' : 'Consultar' }}
+      </button>
+    </footer>
+  </section>
+</div>

@@ -1,0 +1,146 @@
+.detalhes-exemplar {
+  min-height: 100vh;
+  padding: 32px;
+  background: #f5f7fb;
+  color: #172033;
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+}
+
+.voltar {
+  display: inline-block;
+  margin-bottom: 24px;
+  color: #315bd6;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.estado,
+.erro,
+.sem-registros {
+  padding: 20px;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.erro {
+  color: #b42318;
+}
+
+.card {
+  max-width: 1100px;
+  margin-bottom: 20px;
+  padding: 28px;
+  border: 1px solid #e9edf4;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.identificador,
+.cabecalho p {
+  color: #8792a4;
+  font-size: 12px;
+}
+
+h1 {
+  margin: 8px 0 0;
+  font-size: 28px;
+}
+
+.informacoes {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-top: 28px;
+}
+
+.informacoes div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.informacoes span {
+  color: #8792a4;
+  font-size: 12px;
+}
+
+.informacoes strong {
+  font-size: 14px;
+}
+
+.cabecalho {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.cabecalho h2 {
+  margin: 0 0 6px;
+  font-size: 19px;
+}
+
+.cabecalho p {
+  margin: 0;
+}
+
+.cabecalho > strong {
+  color: #64748b;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.tabela-wrapper {
+  overflow-x: auto;
+  border: 1px solid #e9edf4;
+  border-radius: 8px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+th,
+td {
+  padding: 13px 14px;
+  border-bottom: 1px solid #edf0f4;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+th {
+  color: #8792a4;
+  background: #fafbfd;
+  font-size: 10px;
+}
+
+tr:last-child td {
+  border-bottom: 0;
+}
+
+.sem-registros {
+  color: #64748b;
+  font-size: 13px;
+}
+
+@media (max-width: 700px) {
+  .detalhes-exemplar {
+    padding: 20px 16px;
+  }
+
+  .card {
+    padding: 22px;
+  }
+
+  .informacoes {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .cabecalho {
+    flex-direction: column;
+  }
+}

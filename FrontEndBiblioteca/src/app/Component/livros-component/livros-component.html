@@ -1,0 +1,356 @@
+
+<!-- Barra superior do sistema -->
+<header class="topbar">
+  <div class="breadcrumb">
+    <span>Biblioteca</span>
+    <span class="breadcrumb-separator">/</span>
+    <strong>Livros</strong>
+  </div>
+
+  <div class="topbar-right">
+    <div class="system-status">
+      <span class="status-dot"></span>
+      Sistema ativo
+    </div>
+
+    <div class="avatar">B</div>
+  </div>
+</header>
+
+<!-- Página de gerenciamento -->
+<main class="pagina-livros">
+
+  <!-- Cabeçalho da página -->
+  <header class="cabecalho-pagina">
+    <div>
+      <span class="subtitulo">ACERVO</span>
+      <h1>Gerenciamento de livros</h1>
+      <p>Consulte e gerencie os livros cadastrados no acervo.</p>
+    </div>
+
+    <div class="acoes-cabecalho">
+      <button
+        type="button"
+        class="botao-atualizar"
+        (click)="carregarLivros()"
+        [disabled]="carregando">
+        {{ carregando ? 'Carregando...' : '↻ Atualizar' }}
+      </button>
+
+      <button
+        type="button"
+        class="btn-cadastrar"
+        (click)="abrirCadastro()">
+        <span class="icone-botao">+</span>
+        Cadastrar livro
+      </button>
+    </div>
+  </header>
+
+  <!-- Mensagem de erro -->
+  <div class="mensagem-erro" *ngIf="erro">
+    {{ erro }}
+  </div>
+
+  <!-- Estatísticas -->
+  <section class="estatisticas">
+    <article class="card-estatistica">
+      <span class="estatistica-icone">▤</span>
+      <div>
+        <p>Total de livros</p>
+        <h2>{{ livros.length }}</h2>
+      </div>
+    </article>
+
+    <article class="card-estatistica">
+      <span class="estatistica-icone">◈</span>
+      <div>
+        <p>Gêneros cadastrados</p>
+        <h2>{{ totalGeneros }}</h2>
+      </div>
+    </article>
+
+    <article class="card-estatistica">
+      <span class="estatistica-icone">⌕</span>
+      <div>
+        <p>Livros encontrados</p>
+        <h2>{{ livrosFiltrados.length }}</h2>
+      </div>
+    </article>
+
+  </section>
+
+  <!-- Busca e filtros -->
+  <section class="secao-acervo">
+
+    <div class="secao-cabecalho">
+      <div>
+        <h2>Acervo cadastrado</h2>
+        <p>Pesquise e consulte os livros disponíveis.</p>
+      </div>
+    </div>
+
+    <div class="barra-filtros">
+      <input
+        type="search"
+        placeholder="Buscar por título, autor, ISBN ou editora..."
+        [(ngModel)]="busca"
+        (ngModelChange)="aplicarFiltros()"
+        aria-label="Buscar livros" />
+
+      <select
+        [(ngModel)]="generoSelecionado"
+        (ngModelChange)="aplicarFiltros()"
+        aria-label="Filtrar por gênero">
+
+        <option value="Todos os gêneros">
+          Todos os gêneros
+        </option>
+
+        <option
+          *ngFor="let categoria of categorias.slice(1)"
+          [value]="categoria">
+          {{ categoria }}
+        </option>
+      </select>
+    </div>
+
+    <div class="resumo-livros">
+      <span>
+        {{ livrosFiltrados.length }}
+        livro(s) encontrado(s)
+      </span>
+
+      <span>
+        {{ totalGeneros }} gênero(s)
+      </span>
+    </div>
+
+    <div class="estado-carregamento" *ngIf="carregando">
+      Carregando livros...
+    </div>
+
+    <!-- Tabela -->
+    <div
+      class="tabela-container"
+      *ngIf="!carregando && !erro">
+
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Livro</th>
+            <th>Autor</th>
+            <th>Gêneros</th>
+            <th>Ano</th>
+            <th>Exemplares</th>
+            <th>Disponíveis</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let livro of livrosFiltrados">
+            <td class="id-livro">#{{ livro.id }}</td>
+            <td>
+              <div
+                class="livro-info livro-clicavel"
+                role="link"
+                tabindex="0"
+                [attr.aria-label]="'Abrir detalhes do livro ' + livro.titulo"
+                (click)="abrirDetalhes(livro)"
+                (keydown.enter)="abrirDetalhes(livro)"
+                (keydown.space)="abrirDetalhes(livro); $event.preventDefault()">
+                <div
+                  class="livro-capa"
+                  [ngClass]="livro.cor">
+                  {{ livro.simbolo }}
+                </div>
+
+                <div class="livro-detalhes">
+                  <strong>{{ livro.titulo }}</strong>
+                  <small>
+                    ISBN: {{ livro.isbn || 'Não informado' }}
+                  </small>
+                </div>
+              </div>
+            </td>
+
+            <td>{{ livro.autor }}</td>
+
+            <td>
+              <div class="livro-genero">
+                {{ getGeneros(livro) }}
+              </div>
+            </td>
+
+            <td>
+              {{ livro.anoPublicacao || 'Não informado' }}
+            </td>
+
+            <td>{{ livro.totalExemplares }}</td>
+
+            <td>
+              <span class="disponibilidade">
+                {{ livro.exemplaresDisponiveis }}
+              </span>
+            </td>
+          </tr>
+
+          <tr *ngIf="livrosFiltrados.length === 0">
+            <td colspan="7" class="sem-resultados">
+              Nenhum livro encontrado.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<!-- Modal de cadastro -->
+<div
+  class="modal-overlay"
+  *ngIf="modalCadastroAberto"
+  (click)="fecharCadastro()">
+
+  <section
+    class="modal-cadastro"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="titulo-modal"
+    (click)="$event.stopPropagation()">
+
+    <header class="modal-cabecalho">
+      <div>
+        <span class="subtitulo">NOVO REGISTRO</span>
+        <h2 id="titulo-modal">Cadastrar livro</h2>
+        <p>Preencha os dados para adicionar ao acervo.</p>
+      </div>
+
+      <button
+        type="button"
+        class="btn-fechar"
+        aria-label="Fechar formulário"
+        (click)="fecharCadastro()">
+        &times;
+      </button>
+    </header>
+
+    <form
+      #formLivro="ngForm"
+      (ngSubmit)="salvarLivro()">
+
+      <div class="formulario-conteudo">
+        <div class="campo campo-completo">
+          <label for="titulo">Título <span>*</span></label>
+          <input
+            id="titulo"
+            name="titulo"
+            [(ngModel)]="novoLivro.titulo"
+            placeholder="Digite o título do livro"
+            required />
+        </div>
+
+        <div class="campo">
+          <label for="autor">Autor <span>*</span></label>
+          <input
+            id="autor"
+            name="autor"
+            [(ngModel)]="novoLivro.autor"
+            placeholder="Nome do autor"
+            required />
+        </div>
+
+        <div class="campo">
+          <label for="isbn">ISBN</label>
+          <input
+            id="isbn"
+            name="isbn"
+            [(ngModel)]="novoLivro.isbn"
+            placeholder="Código ISBN" />
+        </div>
+
+        <div class="campo">
+          <label for="editora">Editora</label>
+          <input
+            id="editora"
+            name="editora"
+            [(ngModel)]="novoLivro.editora"
+            placeholder="Nome da editora" />
+        </div>
+
+        <div class="campo">
+          <label for="grafica">Gráfica</label>
+          <input
+            id="grafica"
+            name="grafica"
+            [(ngModel)]="novoLivro.grafica"
+            placeholder="Nome da gráfica" />
+        </div>
+
+        <div class="campo">
+          <label for="edicao">Edição</label>
+          <input
+            id="edicao"
+            name="edicao"
+            [(ngModel)]="novoLivro.edicao"
+            placeholder="Ex.: 2ª edição" />
+        </div>
+
+        <div class="campo">
+          <label for="ano">Ano de publicação</label>
+          <input
+            id="ano"
+            name="anoPublicacao"
+            type="number"
+            min="0"
+            [(ngModel)]="novoLivro.anoPublicacao" />
+        </div>
+
+        <div class="campo">
+          <label for="idade">Classificação etária</label>
+          <input
+            id="idade"
+            name="idade"
+            type="number"
+            min="0"
+            [(ngModel)]="novoLivro.idade" />
+        </div>
+
+        <div class="campo campo-completo">
+          <label for="sinopse">Sinopse</label>
+          <textarea
+            id="sinopse"
+            name="sinopse"
+            rows="4"
+            [(ngModel)]="novoLivro.sinopse"
+            placeholder="Descreva brevemente o livro...">
+          </textarea>
+        </div>
+
+        <p
+          class="mensagem-formulario"
+          *ngIf="mensagem"
+          role="status">
+          {{ mensagem }}
+        </p>
+      </div>
+
+      <footer class="modal-acoes">
+        <button
+          type="button"
+          class="btn-cancelar"
+          (click)="fecharCadastro()">
+          Cancelar
+        </button>
+
+        <button
+          type="submit"
+          class="btn-salvar"
+          [disabled]="salvando || formLivro.invalid">
+          {{ salvando ? 'Salvando...' : 'Cadastrar livro' }}
+        </button>
+      </footer>
+    </form>
+  </section>
+</div>

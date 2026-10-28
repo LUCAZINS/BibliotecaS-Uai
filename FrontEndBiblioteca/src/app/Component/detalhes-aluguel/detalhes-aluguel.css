@@ -1,0 +1,108 @@
+.detalhes-aluguel {
+  min-height: 100vh;
+  padding: 32px;
+  background: #f5f7fb;
+  color: #172033;
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+}
+
+.voltar {
+  display: inline-block;
+  margin-bottom: 24px;
+  color: #315bd6;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.estado,
+.erro {
+  padding: 20px;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.erro {
+  color: #b42318;
+}
+
+.card {
+  max-width: 1100px;
+  margin-bottom: 20px;
+  padding: 28px;
+  border: 1px solid #e9edf4;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.identificador,
+.cabecalho p,
+.informacoes span {
+  color: #8792a4;
+  font-size: 12px;
+}
+
+h1 {
+  display: inline-block;
+  margin: 8px 16px 0 0;
+  font-size: 28px;
+}
+
+.status {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #e8f5ed;
+  color: #18794e;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.informacoes {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-top: 28px;
+}
+
+.informacoes div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.informacoes strong {
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+.campo-largo {
+  grid-column: span 3;
+}
+
+.cabecalho h2 {
+  margin: 0 0 6px;
+  font-size: 19px;
+}
+
+.cabecalho p {
+  margin: 0;
+}
+
+@media (max-width: 700px) {
+  .detalhes-aluguel {
+    padding: 20px 16px;
+  }
+
+  .card {
+    padding: 22px;
+  }
+
+  .informacoes {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .campo-largo {
+    grid-column: span 2;
+  }
+}
