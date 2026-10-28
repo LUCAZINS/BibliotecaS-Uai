@@ -1,0 +1,67 @@
+# ======================================
+# BACKEND - ASP.NET CORE / C#
+# ======================================
+BackEndBiblioteca/bin/
+BackEndBiblioteca/obj/
+BackEndBiblioteca/.vs/
+BackEndBiblioteca/publish/
+BackEndBiblioteca/TestResults/
+
+# Configurações locais e segredos do backend
+BackEndBiblioteca/appsettings.Development.json
+BackEndBiblioteca/appsettings.Local.json
+BackEndBiblioteca/appsettings.*.local.json
+BackEndBiblioteca/secrets.json
+BackEndBiblioteca/*.user
+BackEndBiblioteca/*.suo
+
+# ======================================
+# FRONTEND - ANGULAR / NODE.JS
+# ======================================
+FrontEndBiblioteca/node_modules/
+FrontEndBiblioteca/dist/
+FrontEndBiblioteca/.angular/
+FrontEndBiblioteca/coverage/
+FrontEndBiblioteca/.cache/
+
+# Ambientes locais do Angular
+FrontEndBiblioteca/src/environments/environment.local.ts
+
+# ======================================
+# SEGREDOS E VARIÁVEIS DE AMBIENTE
+# ======================================
+.env
+.env.*
+!.env.example
+**/*credentials*.json
+**/*service-account*.json
+**/*token*.json
+**/*secret*.json
+**/*.pem
+**/*.key
+**/*.pfx
+**/*.p12
+
+# ======================================
+# LOGS E ARQUIVOS TEMPORÁRIOS
+# ======================================
+*.log
+*.tmp
+*.temp
+*.bak
+
+# ======================================
+# EDITORES E SISTEMA OPERACIONAL
+# ======================================
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ======================================
+# BANCOS LOCAIS
+# ======================================
+*.sqlite
+*.sqlite3
+*.db
