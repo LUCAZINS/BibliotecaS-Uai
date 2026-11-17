@@ -13,6 +13,7 @@ import { AlugatarioDetalhesComponent } from './Component/alugatario-detalhes/alu
 import { Detalheslivros } from './Component/detalheslivros/detalheslivros';
 import { DetalhesExemplarComponent } from './Component/detalhes-exemplar/detalhes-exemplar';
 import { DetalhesAluguelComponent } from './Component/detalhes-aluguel/detalhes-aluguel';
+import { Perfil } from './Component/perfil/perfil';
 
 // Importe também os componentes reais de Livros,
 // Exemplares, Empréstimos e Leitores.
@@ -36,6 +37,7 @@ export const routes: Routes = [
     { path: 'Livros/:id', component: Detalheslivros },
     { path: 'exemplares/:id', component: DetalhesExemplarComponent },
     { path: 'alugueis/:id', component: DetalhesAluguelComponent },
+    { path: 'perfil', component: Perfil },
     
       // Adicione as demais páginas aqui,
       // usando seus componentes reais.

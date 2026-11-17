@@ -1,0 +1,85 @@
+# ==============================
+# .NET / ASP.NET Core
+# ==============================
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa]rtifacts/
+publish/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider / VS Code
+.idea/
+.vscode/
+*.sln.iml
+
+# ==============================
+# Configurações sensíveis
+# ==============================
+appsettings.Development.json
+appsettings.Local.json
+appsettings.*.local.json
+secrets.json
+*.pfx
+*.p12
+*.key
+*.pem
+
+# Variáveis de ambiente
+.env
+.env.*
+!.env.example
+
+# ==============================
+# Credenciais e tokens
+# ==============================
+*credentials*.json
+*service-account*.json
+*token*.json
+*secret*.json
+*oauth*.json
+
+# ==============================
+# Logs e arquivos temporários
+# ==============================
+logs/
+*.log
+*.tmp
+*.temp
+*.bak
+
+# ==============================
+# Testes e cobertura
+# ==============================
+TestResults/
+coverage/
+coverage.*
+
+# ==============================
+# Sistema operacional
+# ==============================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ==============================
+# Bancos de dados locais
+# ==============================
+*.db
+*.sqlite
+*.sqlite3
+
+# ==============================
+# Certificados e chaves
+# ==============================
+certs/
+certificados/
