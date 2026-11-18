@@ -2,12 +2,14 @@ import {
   ChangeDetectorRef,
   Component,
   HostListener,
+  OnDestroy,
   OnInit,
   inject
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { Aluguel, AlugueisService } from '../../Service/alugueis-service';
 import {
   Alugatario,
@@ -24,7 +26,7 @@ type EtapaModal = 'codigo' | 'locatario' | 'devolucao';
   styleUrl: './alugueis-component.css',
   templateUrl: './alugueis-component.html',
 })
-export class AlugueisComponent implements OnInit {
+export class AlugueisComponent implements OnInit, OnDestroy {
   private readonly alugueisService = inject(AlugueisService);
   private readonly exemplaresService = inject(ExemplaresService);
   private readonly alugatarioService = inject(AlugatarioService);
@@ -54,13 +56,25 @@ export class AlugueisComponent implements OnInit {
   locatarioSelecionado?: Alugatario;
   salvando = false;
   mensagem = '';
+  private readonly subscriptions = new Subscription();
 
   ngOnInit(): void {
+    this.subscriptions.add(
+      this.alugueisService.alugueis$.subscribe(alugueis => {
+        this.alugueis = alugueis;
+        this.irParaPagina(this.paginaAtual);
+        this.cdr.detectChanges();
+      })
+    );
     this.carregarEmprestimos();
     this.alugatarioService.listar().subscribe({
       next: locatarios => this.locatarios = locatarios,
       error: erro => console.error('Erro ao preparar locatários:', erro)
     });
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 
   get alugueisFiltrados(): Aluguel[] {
@@ -257,7 +271,7 @@ export class AlugueisComponent implements OnInit {
   buscarLocatarios(): void {
     const termo = this.buscaLocatario.trim().toLowerCase();
     if (!termo) {
-      this.mensagem = 'Informe um nome ou CPF para buscar.';
+      this.mensagem = 'Informe um CPF para buscar.';
       return;
     }
 
@@ -322,11 +336,22 @@ export class AlugueisComponent implements OnInit {
       alugatarioId: this.locatarioSelecionado.id,
       exemplarId: this.exemplarSelecionado.id
     }).subscribe({
-      next: () => {
+      next: aluguel => {
         this.salvando = false;
         this.etapa = null;
         this.mensagemSucesso = 'Empréstimo registrado com sucesso.';
-        this.carregarEmprestimos();
+
+        const alugueisAtualizados = [
+          aluguel,
+          ...this.alugueis.filter(item => item.id !== aluguel.id)
+        ];
+
+        this.alugueis = alugueisAtualizados;
+        this.paginaAtual = 1;
+        this.irParaPagina(this.paginaAtual);
+        this.cdr.detectChanges();
+
+        this.carregarEmprestimos(true);
       },
       error: erro => this.mostrarErro(erro)
     });
@@ -342,11 +367,18 @@ export class AlugueisComponent implements OnInit {
     this.alugueisService.devolver({
       exemplarId: this.exemplarSelecionado.id
     }).subscribe({
-      next: () => {
+      next: aluguel => {
         this.salvando = false;
         this.etapa = null;
         this.mensagemSucesso = 'Devolução registrada com sucesso.';
-        this.carregarEmprestimos();
+
+        this.alugueis = this.alugueis.map(item =>
+          item.id === aluguel.id ? aluguel : item
+        );
+        this.irParaPagina(this.paginaAtual);
+        this.cdr.detectChanges();
+
+        this.carregarEmprestimos(true);
       },
       error: erro => this.mostrarErro(erro)
     });
@@ -383,9 +415,9 @@ export class AlugueisComponent implements OnInit {
       digito(10) === Number(numeros[10]);
   }
 
-  private carregarEmprestimos(): void {
+  private carregarEmprestimos(forcarAtualizacao = false): void {
     this.carregando = true;
-    this.alugueisService.listar().subscribe({
+    this.alugueisService.listar(forcarAtualizacao).subscribe({
       next: alugueis => {
         this.alugueis = alugueis;
         this.carregando = false;

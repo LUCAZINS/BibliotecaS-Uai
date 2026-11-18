@@ -508,7 +508,7 @@ export class AlugueisComponent {
     buscarLocatarios() {
         const termo = this.buscaLocatario.trim().toLowerCase();
         if (!termo) {
-            this.mensagem = 'Informe um nome ou CPF para buscar.';
+            this.mensagem = 'Informe umCPF para buscar.';
             return;
         }
         this.carregandoLocatarios = true;

@@ -287,9 +287,9 @@
         [disabled]="carregandoLocatarios || salvando" (click)="buscarPorCpf()">
         {{ carregandoLocatarios ? 'Buscando...' : 'Buscar CPF' }}
       </button>
-      <button class="btn-secundario" type="button"
+      <!-- <button class="btn-secundario" type="button"
         [disabled]="carregandoLocatarios || salvando"
-        (click)="buscarLocatarios()">Buscar locatário</button>
+        (click)="buscarLocatarios()">Buscar locatário</button> -->
 
       <div class="resultado-exemplar" *ngIf="locatarioSelecionado">
         <strong>{{ locatarioSelecionado.nome }}</strong>
