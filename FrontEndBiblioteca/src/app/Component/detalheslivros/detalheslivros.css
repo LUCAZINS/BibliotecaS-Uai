@@ -34,6 +34,24 @@
   background: #fff;
 }
 
+.livro-card > header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.btn-editar {
+  padding: 10px 14px;
+  border: 0;
+  border-radius: 8px;
+  color: #fff;
+  background: #315bd6;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
 .identificador {
   color: #7b8798;
   font-size: 12px;
@@ -172,6 +190,101 @@ h1 {
   background: #f8fafc;
   color: #64748b;
   font-size: 13px;
+}
+
+.modal-overlay {
+  position: fixed;
+  z-index: 20;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgb(20 28 49 / 55%);
+}
+
+.modal-edicao {
+  width: min(100%, 620px);
+  max-height: calc(100vh - 40px);
+  overflow: auto;
+  padding: 24px;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.modal-edicao header,
+.modal-edicao footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.modal-edicao header {
+  margin-bottom: 20px;
+}
+
+.modal-edicao header h2 {
+  margin: 0;
+}
+
+.modal-edicao header button {
+  border: 0;
+  background: transparent;
+  color: #697386;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.campos-edicao {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 13px;
+}
+
+.modal-edicao label {
+  color: #4c566b;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.campo-completo {
+  grid-column: 1 / -1;
+}
+
+.modal-edicao input,
+.modal-edicao textarea {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  padding: 11px;
+  border: 1px solid #dce3ec;
+  border-radius: 7px;
+  font: inherit;
+  resize: vertical;
+}
+
+.modal-edicao footer {
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.modal-edicao footer button {
+  padding: 10px 14px;
+  border: 1px solid #dce3ec;
+  border-radius: 7px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.modal-edicao footer .btn-primary {
+  border-color: #315bd6;
+  color: #fff;
+  background: #315bd6;
+}
+
+.mensagem-edicao {
+  color: #b42318;
+  font-size: 12px;
 }
 
 @media (max-width: 700px) {

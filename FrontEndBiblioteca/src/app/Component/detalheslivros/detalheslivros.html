@@ -6,9 +6,14 @@
 
   <section *ngIf="!carregando && livro" class="livro-card">
     <header>
-      <span class="identificador">Livro #{{ livro.id }}</span>
-      <h1>{{ livro.titulo }}</h1>
-      <p class="autor">{{ livro.autor || 'Autor não informado' }}</p>
+      <div>
+        <span class="identificador">Livro #{{ livro.id }}</span>
+        <h1>{{ livro.titulo }}</h1>
+        <p class="autor">{{ livro.autor || 'Autor não informado' }}</p>
+      </div>
+      <button class="btn-editar" type="button" (click)="abrirEdicao()">
+        Editar informações
+      </button>
     </header>
 
     <div class="informacoes">
@@ -101,4 +106,56 @@
       </p>
     </section>
   </section>
+
+  <div class="modal-overlay" *ngIf="editando">
+    <section class="modal-edicao" role="dialog" aria-modal="true" aria-labelledby="titulo-edicao">
+      <header>
+        <h2 id="titulo-edicao">Editar livro</h2>
+        <button type="button" [disabled]="salvando" (click)="cancelarEdicao()" aria-label="Fechar">×</button>
+      </header>
+
+      <form (ngSubmit)="salvarEdicao()">
+        <div class="campos-edicao">
+          <label>Título *
+            <input name="titulo" [(ngModel)]="formulario.titulo" required>
+          </label>
+          <label>Autor *
+            <input name="autor" [(ngModel)]="formulario.autor" required>
+          </label>
+          <label>ISBN
+            <input name="isbn" [(ngModel)]="formulario.isbn">
+          </label>
+          <label>Editora
+            <input name="editora" [(ngModel)]="formulario.editora">
+          </label>
+          <label>Gráfica
+            <input name="grafica" [(ngModel)]="formulario.grafica">
+          </label>
+          <label>Edição
+            <input name="edicao" [(ngModel)]="formulario.edicao">
+          </label>
+          <label>Ano de publicação
+            <input name="anoPublicacao" type="number" min="0" [(ngModel)]="formulario.anoPublicacao">
+          </label>
+          <label>Idade recomendada
+            <input name="idade" type="number" min="0" [(ngModel)]="formulario.idade">
+          </label>
+          <label class="campo-completo">Gêneros
+            <input name="generos" [(ngModel)]="formulario.generos" placeholder="Romance, Ficção, Drama">
+          </label>
+          <label class="campo-completo">Sinopse
+            <textarea name="sinopse" rows="4" [(ngModel)]="formulario.sinopse"></textarea>
+          </label>
+        </div>
+
+        <p class="mensagem-edicao" *ngIf="mensagem">{{ mensagem }}</p>
+        <footer>
+          <button type="button" [disabled]="salvando" (click)="cancelarEdicao()">Cancelar</button>
+          <button class="btn-primary" type="submit" [disabled]="salvando">
+            {{ salvando ? 'Salvando...' : 'Salvar alterações' }}
+          </button>
+        </footer>
+      </form>
+    </section>
+  </div>
 </main>

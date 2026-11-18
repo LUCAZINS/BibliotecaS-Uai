@@ -35,6 +35,19 @@ export interface Exemplar {
   diasAluguel: number;
 }
 
+export interface AtualizarLivroDto {
+  titulo: string;
+  autor: string;
+  sinopse: string;
+  isbn: string;
+  editora: string;
+  grafica: string;
+  edicao: string;
+  anoPublicacao: number;
+  idade: number;
+  generos: string[];
+}
+
 export enum StatusExemplar {
   Disponivel = 0,
   Alugado = 1
@@ -106,7 +119,7 @@ export class LivrosService {
 
   atualizar(
     id: number,
-    dados: Partial<LivrosModels>
+    dados: AtualizarLivroDto
   ): Observable<unknown> {
     return this.http.put(
       `${environment.apiUrl}/put=${id}`,
