@@ -8,10 +8,11 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Exemplar, ExemplaresService } from '../../Service/ExemplaresService';
 import { Aluguel, AlugueisService } from '../../Service/alugueis-service';
+import { CodigoBarrasComponent } from '../codigo-barras-component/codigo-barras-component';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, CodigoBarrasComponent],
   selector: 'app-detalhes-exemplar',
   styleUrl: './detalhes-exemplar.css',
   templateUrl: './detalhes-exemplar.html'

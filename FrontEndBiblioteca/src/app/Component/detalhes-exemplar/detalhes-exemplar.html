@@ -19,6 +19,13 @@
         <div><span>Localização</span><strong>{{ exemplar['endereçavel'] || 'Não informada' }}</strong></div>
         <div><span>Status</span><strong>{{ statusExemplar(exemplar.status) }}</strong></div>
       </div>
+
+      <app-codigo-barras
+        *ngIf="exemplar.codigoBarras"
+        [codigo]="exemplar.codigoBarras"
+        [titulo]="exemplar.nomeLivro"
+        [nomeArquivo]="'exemplar-' + exemplar.id">
+      </app-codigo-barras>
     </section>
 
     <section class="card historico">

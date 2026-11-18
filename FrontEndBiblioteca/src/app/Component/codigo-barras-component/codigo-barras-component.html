@@ -1,0 +1,14 @@
+<section class="codigo-barras-card" *ngIf="codigo">
+  <div class="codigo-barras-visual">
+    <svg #codigoSvg aria-label="Código de barras"></svg>
+  </div>
+
+  <p class="codigo-barras-invalido" *ngIf="!valido">
+    Este código não é compatível com o formato CODE128.
+  </p>
+
+  <div class="codigo-barras-acoes" *ngIf="valido">
+    <button type="button" (click)="baixar()">Baixar SVG</button>
+    <button type="button" (click)="imprimir()">Imprimir</button>
+  </div>
+</section>

@@ -1,0 +1,41 @@
+:host {
+  display: block;
+}
+
+.codigo-barras-card {
+  max-width: 420px;
+  padding: 16px;
+  border: 1px solid #e5e8f0;
+  border-radius: 10px;
+  background: #fafbfd;
+}
+
+.codigo-barras-visual {
+  display: grid;
+  min-height: 100px;
+  place-items: center;
+  overflow-x: auto;
+  background: #fff;
+}
+
+.codigo-barras-acoes {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.codigo-barras-acoes button {
+  padding: 8px 10px;
+  border: 1px solid #dce3ec;
+  border-radius: 7px;
+  background: #fff;
+  color: #315bd6;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.codigo-barras-invalido {
+  color: #b42318;
+  font-size: 12px;
+}
