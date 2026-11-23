@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { LoginService, MeuUsuario } from '../../Service/login-service';
+import { LoginService, MeuUsuario, UsuarioSistema } from '../../Service/login-service';
 
 export interface UsuarioPerfil {
   id: string;
@@ -43,6 +43,9 @@ export class Perfil implements OnInit {
     email: '',
     senha: ''
   };
+  usuarios: UsuarioSistema[] = [];
+  carregandoUsuarios = false;
+  erroUsuarios = '';
 
   ngOnInit(): void {
     this.carregarPerfil();
@@ -58,6 +61,9 @@ export class Perfil implements OnInit {
         this.usuario = this.normalizarUsuario(dados);
         this.nomeEdicao = this.usuario.nome;
         this.carregando = false;
+        if (this.isAdmin) {
+          this.carregarUsuarios();
+        }
         this.cdr.detectChanges();
       },
       error: (erro) => {
@@ -152,6 +158,7 @@ export class Perfil implements OnInit {
         this.novoPerfil = { nome: '', email: '', senha: '' };
         this.criandoPerfil = false;
         this.mensagemCriacao = 'Perfil criado com sucesso.';
+        this.carregarUsuarios();
         this.cdr.detectChanges();
       },
       error: (erro) => {
@@ -160,6 +167,29 @@ export class Perfil implements OnInit {
         this.erroCriacao =
           erro?.error?.mensagem ||
           'Não foi possível criar o perfil.';
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  carregarUsuarios(): void {
+    this.carregandoUsuarios = true;
+    this.erroUsuarios = '';
+    this.cdr.detectChanges();
+
+    this.loginService.getTodosUsuarios().subscribe({
+      next: usuarios => {
+        this.usuarios = usuarios;
+        this.carregandoUsuarios = false;
+        this.cdr.detectChanges();
+      },
+      error: erro => {
+        console.error('Erro ao carregar usuários:', erro);
+        this.carregandoUsuarios = false;
+        this.erroUsuarios =
+          erro?.status === 403
+            ? 'Você não possui permissão para visualizar os usuários.'
+            : 'Não foi possível carregar os usuários.';
         this.cdr.detectChanges();
       }
     });

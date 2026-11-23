@@ -15,8 +15,8 @@
       <h1>Bem-vindo de volta!</h1>
       <p>Entre com suas credenciais para continuar.</p>
     </div>
-    <p class="erro-login" *ngIf="erro">
-    {{ erro }}
+    <p class="erro-login" *ngIf="erro" role="alert" aria-live="assertive">
+      {{ erro }}
     </p>
     <form (ngSubmit)="entrar()" #loginForm="ngForm">
 
@@ -56,7 +56,10 @@
         <span>Lembrar de mim</span>
       </label>
 
-        <a routerLink="/recuperar-senha">
+        <a
+          [routerLink]="['/recuperar-senha']"
+          [queryParams]="email.trim() ? { email: email.trim() } : null"
+        >
           Esqueceu a senha?
         </a>
       </div>
@@ -64,9 +67,11 @@
       <button
         type="submit"
         class="login-button"
-        [disabled]="loginForm.invalid"
+        [disabled]="loginForm.invalid || carregando"
+        [attr.aria-busy]="carregando"
       >
-        Entrar
+        <span class="spinner" *ngIf="carregando" aria-hidden="true"></span>
+        {{ carregando ? 'Entrando...' : 'Entrar' }}
       </button>
 
     </form>

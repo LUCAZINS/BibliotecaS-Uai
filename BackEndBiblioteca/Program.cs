@@ -48,7 +48,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("LiberarAngular", policy =>
     {
         policy
-            .WithOrigins("http://192.168.1.4:4200")
+            .WithOrigins("http://192.168.1.4:4200", "http://192.168.1.6:4200")
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials();

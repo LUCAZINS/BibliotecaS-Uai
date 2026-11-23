@@ -14,6 +14,7 @@ import { Detalheslivros } from './Component/detalheslivros/detalheslivros';
 import { DetalhesExemplarComponent } from './Component/detalhes-exemplar/detalhes-exemplar';
 import { DetalhesAluguelComponent } from './Component/detalhes-aluguel/detalhes-aluguel';
 import { Perfil } from './Component/perfil/perfil';
+import { RecuperarSenhaComponent } from './Component/recuperar-senha-component/recuperar-senha-component';
 
 // Importe também os componentes reais de Livros,
 // Exemplares, Empréstimos e Leitores.
@@ -22,6 +23,10 @@ export const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent
+  },
+  {
+    path: 'recuperar-senha',
+    component: RecuperarSenhaComponent
   },
   {
     path: 'Barra',

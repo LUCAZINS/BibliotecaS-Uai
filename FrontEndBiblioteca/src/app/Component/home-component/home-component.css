@@ -322,18 +322,21 @@
   min-width: 0;
   min-height: 100vh;
   margin-left: 260px;
+  width: calc(100% - 260px);
   box-sizing: border-box;
 }
 
 @media (max-width: 768px) {
   :host {
     margin-left: 220px;
+    width: calc(100% - 220px);
   }
 }
 
 @media (max-width: 480px) {
   :host {
     margin-left: 75px;
+    width: calc(100% - 75px);
   }
 }
 

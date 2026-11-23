@@ -132,9 +132,27 @@ namespace BackEndBiblioteca.Controllers
                 }
             );
         }
-    
-                
+
         
+        [HttpGet("todosusuarios")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> TodosUsuarios()
+        {
+            // Busca somente usuários que possuem a role "Usuario"
+            var usuarios = await _userManager.GetUsersInRoleAsync("Usuario");
+
+            var resultado = usuarios.Select(u => new
+            {
+                id = u.Id,
+                nome = u.Nome,
+                email = u.Email,
+                emailConfirmado = u.EmailConfirmed
+            }).ToList();
+
+            return Ok(resultado);
+        }
+
+
         [HttpGet("me")]
         [Authorize]
         public async Task<IActionResult> MeuUsuario()

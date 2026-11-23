@@ -110,6 +110,64 @@
   }
 
   @if (!carregando && !erro && isAdmin) {
+    <section class="perfil-card usuarios-card">
+      <div class="usuarios-cabecalho">
+        <div>
+          <h2>Usuários cadastrados</h2>
+          <p>Lista de contas com a função Usuário.</p>
+        </div>
+        <button
+          type="button"
+          class="botao-secundario"
+          (click)="carregarUsuarios()"
+          [disabled]="carregandoUsuarios"
+        >
+          {{ carregandoUsuarios ? 'Atualizando...' : 'Atualizar' }}
+        </button>
+      </div>
+
+      @if (carregandoUsuarios) {
+        <div class="usuarios-estado" role="status">
+          <div class="spinner" aria-hidden="true"></div>
+          <span>Carregando usuários...</span>
+        </div>
+      } @else if (erroUsuarios) {
+        <p class="mensagem erro-mensagem" role="alert">{{ erroUsuarios }}</p>
+      } @else if (usuarios.length === 0) {
+        <p class="usuarios-vazio">Nenhum usuário cadastrado.</p>
+      } @else {
+        <div class="usuarios-tabela" role="region" aria-label="Usuários cadastrados">
+          <table>
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>E-mail</th>
+                <th>Situação</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (usuarioSistema of usuarios; track usuarioSistema.id) {
+                <tr>
+                  <td data-label="Nome">
+                    <strong>{{ usuarioSistema.nome }}</strong>
+                    <small>{{ usuarioSistema.id }}</small>
+                  </td>
+                  <td data-label="E-mail">{{ usuarioSistema.email }}</td>
+                  <td data-label="Situação">
+                    <span
+                      [class.email-confirmado]="usuarioSistema.emailConfirmado"
+                      [class.email-pendente]="!usuarioSistema.emailConfirmado">
+                      {{ usuarioSistema.emailConfirmado ? 'Confirmado' : 'Pendente' }}
+                    </span>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </section>
+
     <section class="perfil-card criacao-card">
       <div class="criacao-cabecalho">
         <span class="painel-icone">+</span>

@@ -44,6 +44,28 @@ export interface UsuarioCriado {
   funcoes: string[];
 }
 
+export interface UsuarioSistema {
+  id: string;
+  nome: string;
+  email: string;
+  emailConfirmado: boolean;
+}
+
+export interface EsqueciSenhaRequest {
+  email: string;
+}
+
+export interface RedefinirSenhaRequest {
+  email: string;
+  codigo: string;
+  novaSenha: string;
+}
+
+export interface RecuperacaoSenhaResponse {
+  mensagem?: string;
+  erros?: string[];
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -105,6 +127,29 @@ export class LoginService {
   criarUsuario(dados: CriarUsuarioRequest): Observable<UsuarioCriado> {
     return this.http.post<UsuarioCriado>(
       `${this.apiUrl}/api/Usuarios`,
+      dados,
+      { withCredentials: true }
+    );
+  }
+
+  getTodosUsuarios(): Observable<UsuarioSistema[]> {
+    return this.http.get<UsuarioSistema[]>(
+      `${this.apiUrl}/api/Usuarios/todosusuarios`,
+      { withCredentials: true }
+    );
+  }
+
+  esqueciSenha(dados: EsqueciSenhaRequest): Observable<RecuperacaoSenhaResponse> {
+    return this.http.post<RecuperacaoSenhaResponse>(
+      `${this.apiUrl}/api/RecuperacaoSenha/esqueci-senha`,
+      dados,
+      { withCredentials: true }
+    );
+  }
+
+  redefinirSenha(dados: RedefinirSenhaRequest): Observable<RecuperacaoSenhaResponse> {
+    return this.http.post<RecuperacaoSenhaResponse>(
+      `${this.apiUrl}/api/RecuperacaoSenha/redefinir`,
       dados,
       { withCredentials: true }
     );
